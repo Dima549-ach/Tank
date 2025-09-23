@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 //[RequireComponent(typeof(Rigidbody))]
 
@@ -34,6 +34,7 @@ public class kontroier : MonoBehaviour
             rb.AddForce(transform.forward * Speed);
         }
         LimitSpeed();
+        print(rb.linearVelocity.magnitude + " Скорость танка");
     }
     private void LimitSpeed()
     {
