@@ -1,21 +1,20 @@
-    using UnityEngine;
-    [RequireComponent(typeof(Rigidbody))]
-    public class kontroier : MonoBehaviour
-{     
-    public class TankSpeedController : MonoBehaviour
-        
-     private Rigidbody rb ;
-    [SerializeField] private float Speed ;
-        [SerializeField] private float maxSpeed = 20f;
-        private Rigidbody rf;
+using UnityEngine;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+//[RequireComponent(typeof(Rigidbody))]
+
+
+public class kontroier : MonoBehaviour
+{
+    private Rigidbody rb;
+    [SerializeField] private float Speed;
+    [SerializeField] private float maxSpeed = 20f;
+    private Rigidbody rf;
+
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.W))
@@ -36,26 +35,13 @@
         }
         LimitSpeed();
     }
-    void LimitSpeed()
+    private void LimitSpeed()
+    {
+        float currentSpeed = rb.linearVelocity.magnitude;
+        if (currentSpeed > maxSpeed)
         {
-            LimitSpeed();
+            rb.linearVelocity = rb.linearVelocity * maxSpeed;
+            print(rb.linearVelocity.magnitude);
         }
-           private void LimitSpeed()
-        {
-            float currentSpeed=rb.velocity.magnitude;
-            if (currentSpeed > maxSpeed) 
-            {
-                rb.velocity = rb.velocity * maxSpeed;
-                print(rb.velocity.magnitude);
-        }
-
-
-
-
-
-
-
-
-
     }
 }
