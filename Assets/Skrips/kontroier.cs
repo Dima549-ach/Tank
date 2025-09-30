@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 
-//[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 
 
 public class kontroier : MonoBehaviour
 {
+    [SerializeField] private float shift = 1;
     private Rigidbody rb;
     [SerializeField] private float Speed;
     [SerializeField] private float maxSpeed = 20f;
-    private Rigidbody rf;
-
+    private  Vector3 LeftTrack;
+    private Vector3 rightTrack;
+    private void OnDrawGizmos() 
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(LeftTrack, Vector3.one);
+        Gizmos.DrawCube(rightTrack, Vector3.one);
+    }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -17,21 +24,23 @@ public class kontroier : MonoBehaviour
 
     void Update()
     {
+        rightTrack = transform.position + (transform.right * shift);
+        LeftTrack = transform.position - (transform.right * shift);
         if (Input.GetKey(KeyCode.W))
         {
-            rb.AddForce(-transform.forward * Speed);
+           rb.AddForceAtPosition(-transform.forward * Speed,);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            rb.AddForce(transform.right * Speed);
+            rb.AddForceAtPosition(transform.right * Speed,);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            rb.AddForce(-transform.right * Speed);
+            rb.AddForceAtPosition(-transform.right * Speed,);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            rb.AddForce(transform.forward * Speed);
+            rb.AddForceAtPosition(transform.forward * Speed,);
         }
         LimitSpeed();
         print(rb.linearVelocity.magnitude + " Скорость танка");
@@ -44,5 +53,14 @@ public class kontroier : MonoBehaviour
             rb.linearVelocity = rb.linearVelocity * maxSpeed;
             print(rb.linearVelocity.magnitude);
         }
+
     }
+    void ApplyForce()
+    {
+        Vector3 direction = rb.transform.position - transform.position;
+        rb.AddForceAtPosition(direction.normalized,transform.position);
+
+    }
+    
+    
 }
