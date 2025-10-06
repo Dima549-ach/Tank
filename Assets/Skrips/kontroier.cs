@@ -9,13 +9,16 @@ public class kontroier : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float Speed;
     [SerializeField] private float maxSpeed = 20f;
-    private  Vector3 LeftTrack;
+    private Vector3 LeftTrack;
     private Vector3 rightTrack;
+
+    [SerializeField] private Transform body;
+
     private void OnDrawGizmos() 
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(LeftTrack, Vector3.one);
-        Gizmos.DrawCube(rightTrack, Vector3.one);
+        Gizmos.DrawCube(LeftTrack, Vector3.one * 0.1f);
+        Gizmos.DrawCube(rightTrack, Vector3.one * 0.1f);
     }
     void Start()
     {
@@ -24,23 +27,24 @@ public class kontroier : MonoBehaviour
 
     void Update()
     {
-        rightTrack = transform.position + (transform.right * shift);
-        LeftTrack = transform.position - (transform.right * shift);
+        rightTrack = body.position + (transform.right.normalized * shift);
+        LeftTrack = body.position - (transform.right.normalized * shift);
+
         if (Input.GetKey(KeyCode.W))
         {
-           rb.AddForceAtPosition(-transform.forward * Speed,);
+           rb.AddForceAtPosition(-transform.forward * Speed, LeftTrack);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            rb.AddForceAtPosition(transform.right * Speed,);
+            rb.AddForceAtPosition(transform.right * Speed, LeftTrack);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            rb.AddForceAtPosition(-transform.right * Speed,);
+            rb.AddForceAtPosition(-transform.right * Speed, LeftTrack);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            rb.AddForceAtPosition(transform.forward * Speed,);
+            rb.AddForceAtPosition(transform.forward * Speed, LeftTrack);
         }
         LimitSpeed();
         print(rb.linearVelocity.magnitude + " Скорость танка");
