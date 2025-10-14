@@ -9,9 +9,11 @@ public class kontroier : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float Speed;
     [SerializeField] private float maxSpeed = 20f;
-    private  Vector3 LeftTrack;
+    private Vector3 LeftTrack;
     private Vector3 rightTrack;
-    private void OnDrawGizmos() 
+    [SerializeField] private float maxAngularSpeed = 5f;
+    private void OnDrawGizmos();
+    
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(LeftTrack, Vector3.one);
@@ -28,22 +30,27 @@ public class kontroier : MonoBehaviour
         LeftTrack = transform.position - (transform.right * shift);
         if (Input.GetKey(KeyCode.W))
         {
-           rb.AddForceAtPosition(-transform.forward * Speed,);
+            rb.AddForceAtPosition(transform.forward * Speed, rightTrack);
+            rb.AddForceAtPosition(transform.forward * Speed, LeftTrack);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            rb.AddForceAtPosition(transform.right * Speed,);
+            rb.AddForceAtPosition(-transform.forward * Speed, rightTrack);
+            rb.AddForceAtPosition(transform.forward * Speed, LeftTrack);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            rb.AddForceAtPosition(-transform.right * Speed,);
+            rb.AddForceAtPosition(-transform.forward * Speed, LeftTrack);
+            rb.AddForceAtPosition(transform.forward * Speed, rightTrack);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            rb.AddForceAtPosition(transform.forward * Speed,);
+            rb.AddForceAtPosition(-transform.forward * Speed, rightTrack);
+            rb.AddForceAtPosition(-transform.forward * Speed, LeftTrack);
         }
         LimitSpeed();
         print(rb.linearVelocity.magnitude + " Скорость танка");
+        maxAngularSpeed1();
     }
     private void LimitSpeed()
     {
@@ -58,9 +65,18 @@ public class kontroier : MonoBehaviour
     void ApplyForce()
     {
         Vector3 direction = rb.transform.position - transform.position;
-        rb.AddForceAtPosition(direction.normalized,transform.position);
+        rb.AddForceAtPosition(direction.normalized, transform.position);
 
     }
-    
-    
+     void maxAngularSpeed1();
+    {
+        Vector3 currentAngularVelociti = rb.angularVelocity;
+    currentAngularVelociti.x = Mathf.Clamp(currentAngularVelociti.x, -maxAngularSpeed, maxAngularSpeed);
+    currentAngularVelociti.y = Mathf.Clamp(currentAngularVelociti.y, -maxAngularSpeed, maxAngularSpeed);
+    currentAngularVelociti.z = Mathf.Clamp(currentAngularVelociti.z, -maxAngularSpeed, maxAngularSpeed);
+    rb.angularVelocity = currentAngularVelociti;
+   }
+     
 }
+    
+
